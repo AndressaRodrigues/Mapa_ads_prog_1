@@ -25,7 +25,11 @@ public class Controle {
                 case 2:
                     this.movimentacao();
                     break;
+
                 case 3:
+                    reajustePreco();
+                    break;
+                case 4:
                     this.relatorioEstoque();
                     break;
                 case 0:
@@ -111,6 +115,7 @@ public class Controle {
         System.out.println("Informe o preço:");
         double preco = sc.nextDouble();
         System.out.println("Informe a unidade de medida");
+        sc.nextLine();
         String unidade = sc.nextLine();
         System.out.println("Informe a quantidade");
         int quantidade = sc.nextInt();
@@ -126,7 +131,6 @@ public class Controle {
                             + "\nQuantidade no estoque: "
                             + quantidade);
 
-        sc.close();
         return produto;
     }
 
@@ -136,7 +140,7 @@ public class Controle {
             Scanner scanner = new Scanner(System.in);
             this.tituloMenu();
             System.out.println("ALTERAÇÃO DE PRODUTO");
-            System.out.println("Informe o nome do mantimento para alterar");
+            System.out.println("Informe o nome do produto para alterar");
             String nomeConsulta = scanner.nextLine();
             boolean controle=true;
             for (int i = 0; i < posicaoAtual; i++) {
@@ -144,10 +148,10 @@ public class Controle {
                 if (nomeConsulta.equalsIgnoreCase(estoque[i].getNome())) {
                     controle=false;
                     System.out.println("PRODUTO ENCONTRADO\n");
-                    Produto mantimentos = novoProduto();
+                    Produto produto = novoProduto();
                     escolha = confirmaOperacao();
                     if (escolha.equalsIgnoreCase("S")) {
-                        estoque[i] = mantimentos;
+                        estoque[i] = produto;
                     }
                     break;
                 }
@@ -162,6 +166,38 @@ public class Controle {
         if (controle) {
             System.out.println("Produto não encontrado no estoque");
         }
+    }
+
+    // reajusta o preço
+    private void reajustePreco() {
+        String escolha;
+        do {
+            Scanner sc = new Scanner(System.in);
+            this.tituloMenu();
+            System.out.println("ALTERAÇÃO DE PREÇO DE PRODUTO PRODUTO");
+            System.out.println("Informe o nome do produto para alterar");
+            String nomeConsulta = sc.nextLine();
+            boolean controle=true;
+            for (int i = 0; i < posicaoAtual; i++) {
+
+                if (nomeConsulta.equalsIgnoreCase(estoque[i].getNome())) {
+                    controle=false;
+                    System.out.println("PRODUTO ENCONTRADO\n");
+                    System.out.println("VALOR ATUAL: " + estoque[i].getPreco());
+                    System.out.println("DIGITE O NOVO VALOR: ");
+                    double novoPreco = sc.nextDouble();
+                    System.out.println("O NOVO PREÇO SERA: " + novoPreco);
+                    escolha = confirmaOperacao();
+                    if (escolha.equalsIgnoreCase("S")) {
+                        estoque[i].setPreco(novoPreco);
+                    }
+                    break;
+                }
+            }
+            mensagemProdutoNaoExiste(controle);
+            escolha = getRepetirOperacao();
+
+        } while (escolha.equalsIgnoreCase("S"));
     }
 
     private void consultaEstoque() {
@@ -263,8 +299,8 @@ public class Controle {
                     controle=false;
                     Produto produtoMovimentacao = estoque[i];
                     produtoMovimentacao = estoque[i];
-                    System.out.println("QUANTIDATDE ATUAL : " +  produtoMovimentacao.getQuant());
-                    System.out.println("QUANTIDADEE ENTRADA : ");
+                    System.out.println("QUANTIDADE ATUAL : " +  produtoMovimentacao.getQuant());
+                    System.out.println("QUANTIDADE ENTRADA : ");
                     int quantidadeEntrada = sc.nextInt();
                     System.out.println("QUANTIDADE FINAL : " + ( produtoMovimentacao.getQuant() + quantidadeEntrada));
                     escolha = confirmaOperacao();
@@ -287,8 +323,8 @@ public class Controle {
         String escolha;
         do {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("CONSUMO DOS MANTIMENTOS");
-            System.out.println("Nome do mantimento");
+            System.out.println("SAIDA DE PRODUTOS DO ESTOQUE");
+            System.out.println("Nome do produto:");
             String nomeMantimento = scanner.nextLine();
 
             boolean controle = true;
@@ -296,10 +332,10 @@ public class Controle {
                 if (nomeMantimento.equalsIgnoreCase(estoque[i].getNome())) {
                     controle=false;
                     Produto produtoMovimentacao = estoque[i];;
-                    System.out.println("QTDE ATUAL : " + produtoMovimentacao.getQuant());
-                    System.out.println("QTDE SAÍDA : ");
+                    System.out.println("QUANTIDADE ATUAL : " + produtoMovimentacao.getQuant());
+                    System.out.println("QUANTIDADE SAÍDA : ");
                     int quantidadeSaida = scanner.nextInt();
-                    System.out.println("QTDE FINAL : " + (produtoMovimentacao.getQuant() - quantidadeSaida));
+                    System.out.println("QUANTIDADE FINAL : " + (produtoMovimentacao.getQuant() - quantidadeSaida));
                     if (produtoMovimentacao.getQuant() < quantidadeSaida) {
                         System.out.println("Quantidade maior que no estoque, saída não é possível");
                         break;
@@ -326,9 +362,15 @@ public class Controle {
             System.out.println("\n");
             System.out.println("PRODUTOS: \n"
                                 + "POSIÇÃO NO ESTOQUE: "
-                                + i
+                                + i+1
                                 + "\n"
-                                + estoque[i]);
+                                + estoque[i].getNome()
+                                + "Preço: "
+                                + estoque[i].getPreco()
+                                + "Unidade de medida: "
+                                + estoque[i].getUnidade()
+                                + "Quantidade em estoque: "
+                                + estoque[i].getQuant());
 
         }
         Scanner scanner = new Scanner(System.in);
@@ -345,7 +387,7 @@ public class Controle {
         String escolha;
         System.out.println("REPETIR OPERAÇÃO ( S/N ) ? ");
         escolha = scanner.next();
-        return escolha;
+        return escolha.toUpperCase();
     }
 
     public String confirmaOperacao() {
@@ -353,12 +395,18 @@ public class Controle {
         String escolha;
         System.out.println("CONFIRMA OPERAÇÃO ( S/N ) ?");
         escolha = scanner.next();
-        return escolha;
+        return escolha.toUpperCase();
     }
 
     public int getEscolhaMenu() {
-        Scanner scanner = new Scanner(System.in);
-        return Integer.parseInt(scanner.next());
+        Scanner sc = new Scanner(System.in);
+        int escolha = 0;
+        try{
+            escolha =  Integer.parseInt(sc.next());
+        } catch (NumberFormatException e) {
+            System.out.println("Você digitou uma opção diferente das disponíveis");
+        }
+        return escolha;
     }
 }
 

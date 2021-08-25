@@ -30,9 +30,7 @@ public class Produto {
         this.preco = preco;
     }
 
-    public int getQuant() {
-        return quant;
-    };
+    public int getQuant() { return quant; };
 
     public void setQuant(int quant) {
         this.quant = quant;

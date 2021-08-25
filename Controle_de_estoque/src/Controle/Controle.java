@@ -7,7 +7,7 @@ import Produto.Produto;
 public class Controle {
     public Controle(){}
 
-    private Produto estoque[] = new Produto[5];
+    private Produto estoque[] = new Produto[1];
     private int posicaoAtual = 0;
 
     //tela principal
@@ -94,18 +94,22 @@ public class Controle {
 
     private void incluiProduto() {
         String escolha;
-        do {
-            this.tituloMenu();
-            System.out.println("CADASTRO DE PRODUTOS");
-            Produto produto = novoProduto();
-            escolha = confirmaOperacao();
-            if (escolha.equalsIgnoreCase("S")) {
-                estoque[posicaoAtual] = produto;
-                posicaoAtual++;
-            }
-            escolha = getRepetirOperacao();
+        if(posicaoAtual < estoque.length) {
+            do {
+                this.tituloMenu();
+                System.out.println("CADASTRO DE PRODUTOS");
+                Produto produto = novoProduto();
+                escolha = confirmaOperacao();
+                if (escolha.equalsIgnoreCase("S")) {
+                    estoque[posicaoAtual] = produto;
+                    posicaoAtual++;
+                }
+                escolha = getRepetirOperacao();
 
-        } while (escolha.equalsIgnoreCase("S"));
+            } while (escolha.equalsIgnoreCase("S") && (posicaoAtual < estoque.length));
+        } else {
+            System.out.println("Estoque atingiu sua capacidade máxima! Por favor, exclua ou remova algum produto\n\n");
+        }
     }
 
     private Produto novoProduto() {
@@ -332,6 +336,7 @@ public class Controle {
             escolha = getRepetirOperacao();
 
         } while (escolha.equalsIgnoreCase("S"));
+
     }
 
 

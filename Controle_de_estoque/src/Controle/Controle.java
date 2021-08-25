@@ -1,3 +1,5 @@
+package Controle;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import Produto.Produto;
@@ -7,6 +9,36 @@ public class Controle {
 
     private Produto estoque[] = new Produto[5];
     private int posicaoAtual = 0;
+
+    //tela principal
+    public void telaPrincipal() {
+        int op = 0;
+        Scanner sc = new Scanner(System.in);
+        do {
+            this.tituloMenu();
+            op = this.menu();
+
+            switch (op) {
+                case 1:
+                    this.cadastro();
+                    break;
+                case 2:
+                    this.movimentacao();
+                    break;
+                case 3:
+                    this.relatorioEstoque();
+                    break;
+                case 0:
+                    System.out.println("Saindo do sistema");
+                    break;
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        } while (op != 0);
+
+        sc.close();
+    }
 
     //menu principal e sua interface
     public int menu() {
@@ -25,7 +57,7 @@ public class Controle {
     }
 
     //cadastro e demais funções referentes
-    public int cadastro(){
+    public void cadastro(){
         this.tituloMenu();
         int op;
         System.out.println("CADASTRO DE PRODUTOS\n"
@@ -192,17 +224,10 @@ public class Controle {
 
 
     //movimentação e demais funcoes referentes
-    public void fdsafamovimentacao(){
-        System.out.println("MOVIMENTAÇÃO\n"
-                            + "1 - ENTRADA\n"
-                            + "2 - SAÍDA\n"
-                            + "0 - RETORNAR\n"
-                            + "OPÇÃO: ");
-    }
 
     private void movimentacao() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("MOVIMENTACAO");
+        System.out.println("MOVIMENTAÇÃO");
         System.out.println("1 - ENTRADA\n" 
                             + "2 - SAÍDA\n"
                             + "0 - RETORNAR\n"
@@ -225,16 +250,6 @@ public class Controle {
         }
     }
 
-    public void movEnt(){
-        System.out.println();
-                            PRODUTO:\n
-                            QTDE ATUAL:\n
-                            QTDE ENTRADA:\n
-                            QTDE FINAL: ");
-    }
-
-    public void movSai(){}
-
     private void movEnt() {
         String escolha;
         do {
@@ -242,25 +257,25 @@ public class Controle {
             System.out.println("MOVIMENTAÇÃO - ENTRADA DE PRODUTO");
             System.out.println("Nome do produto:");
             String prodNome = sc.nextLine();
-            Produto produtoMovimentacao = estoque[i];
             boolean controle=true;
             for (int i = 0; i < posicaoAtual; i++) {
                 if (prodNome.equalsIgnoreCase(estoque[i].getNome())) {
                     controle=false;
+                    Produto produtoMovimentacao = estoque[i];
                     produtoMovimentacao = estoque[i];
-                    System.out.println("QTDE ATUAL : " +  produtoMovimentacao.getQuantidadeEmEstoque());
-                    System.out.println("QTDE ENTRADA : ");
+                    System.out.println("QUANTIDATDE ATUAL : " +  produtoMovimentacao.getQuant());
+                    System.out.println("QUANTIDADEE ENTRADA : ");
                     int quantidadeEntrada = sc.nextInt();
-                    System.out.println("QTDE FINAL : " + ( produtoMovimentacao.getQuantidadeEmEstoque() + quantidadeEntrada));
+                    System.out.println("QUANTIDADE FINAL : " + ( produtoMovimentacao.getQuant() + quantidadeEntrada));
                     escolha = confirmaOperacao();
                     if (escolha.equalsIgnoreCase("S")) {
-                        produtoMovimentacao.setAdicionarQuantidade(quantidadeEntrada);
+                        produtoMovimentacao.setQuantAdd(quantidadeEntrada);
                         estoque[i] =  produtoMovimentacao;
                     }
                     break;
                 }
             }
-            mensagemConsultaNaoEncontrada(controle);
+            mensagemProdutoNaoExiste(controle);
 
             escolha = getRepetirOperacao();
 
@@ -268,7 +283,7 @@ public class Controle {
     }
 
 
-    private void saidaMovimentacao() {
+    private void movSai() {
         String escolha;
         do {
             Scanner scanner = new Scanner(System.in);
@@ -278,31 +293,49 @@ public class Controle {
 
             boolean controle = true;
             for (int i = 0; i < posicaoAtual; i++) {
-                if (nomeMantimento.equalsIgnoreCase(mantimentosList[i].getNome())) {
+                if (nomeMantimento.equalsIgnoreCase(estoque[i].getNome())) {
                     controle=false;
-                    Mantimentos mantimentosMovimentacao = mantimentosList[i];
-                    System.out.println("QTDE ATUAL : " + mantimentosMovimentacao.getQuantidadeEmEstoque());
+                    Produto produtoMovimentacao = estoque[i];;
+                    System.out.println("QTDE ATUAL : " + produtoMovimentacao.getQuant());
                     System.out.println("QTDE SAÍDA : ");
                     int quantidadeSaida = scanner.nextInt();
-                    System.out.println("QTDE FINAL : " + (mantimentosMovimentacao.getQuantidadeEmEstoque() - quantidadeSaida));
-                    if (mantimentosMovimentacao.getQuantidadeEmEstoque() < quantidadeSaida) {
+                    System.out.println("QTDE FINAL : " + (produtoMovimentacao.getQuant() - quantidadeSaida));
+                    if (produtoMovimentacao.getQuant() < quantidadeSaida) {
                         System.out.println("Quantidade maior que no estoque, saída não é possível");
                         break;
                     }
                     escolha = confirmaOperacao();
                     if (escolha.equalsIgnoreCase("S")) {
-                        mantimentosMovimentacao.setDiminuirQuantidade(quantidadeSaida);
-                        mantimentosList[i] = mantimentosMovimentacao;
+                        produtoMovimentacao.setQuantSub(quantidadeSaida);
+                        estoque[i] = produtoMovimentacao;
                     }
                     break;
                 }
             }
-            mensagemConsultaNaoEncontrada(controle);
+            mensagemProdutoNaoExiste(controle);
             escolha = getRepetirOperacao();
 
         } while (escolha.equalsIgnoreCase("S"));
     }
 
+    //relatório do estoque
+    private void relatorioEstoque() {
+        this.tituloMenu();
+        System.out.println("RELATÓRIO DO ESTOQUE");
+        for (int i = 0; i < posicaoAtual; i++) {
+            System.out.println("\n");
+            System.out.println("PRODUTOS: \n"
+                                + "POSIÇÃO NO ESTOQUE: "
+                                + i
+                                + "\n"
+                                + estoque[i]);
+
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n\n\n");
+        System.out.println("APERTE QUALQUER LETRA + ENTER PARA CONTINUAR");
+        scanner.next();
+    }
 
 
 

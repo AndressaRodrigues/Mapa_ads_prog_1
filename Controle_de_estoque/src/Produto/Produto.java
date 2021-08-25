@@ -32,11 +32,15 @@ public class Produto {
 
     public int getQuant() {
         return quant;
-    }
+    };
 
     public void setQuant(int quant) {
         this.quant = quant;
-    }
+    };
+
+    public void setQuantAdd(int quant) { this.quant += quant;};
+
+    public void setQuantSub(int quant) { this.quant -= quant;};
 
     public String getUnidade() {
         return unidade;

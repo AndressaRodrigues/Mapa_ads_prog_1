@@ -213,7 +213,15 @@ public class Controle {
             for (int i = 0; i < posicaoAtual; i++) {
                 if (nomeConsulta.equalsIgnoreCase(estoque[i].getNome())) {
                     controle=false;
-                    System.out.println(estoque[i].toString());
+                    System.out.println("PRODUTO ENCONTRADO\n");
+                    System.out.println("Produto: "
+                            + estoque[i].getNome()
+                            + "\nPreço: "
+                            + estoque[i].getPreco()
+                            + "\nUnidade de medida: "
+                            + estoque[i].getUnidade()
+                            + "\nQuantidade em estoque: "
+                            + estoque[i].getQuant());
                     break;
                 }
             }
@@ -233,14 +241,22 @@ public class Controle {
             System.out.println("Informe o nome do produto a ser excluído:");
             String nomeConsulta = scanner.nextLine();
             boolean controle = true;
-            ArrayList<Produto> arrayList = new ArrayList<>();
+            ArrayList<Produto> arrayList = new ArrayList();
             arrayList.add(new Produto());
             for (int i = 0; i < posicaoAtual; i++) {
                 scanner = new Scanner(System.in);
-                Produto mantimentos = arrayList.get(i);
+                Produto produtos = arrayList.get(i);
                 if (nomeConsulta.equalsIgnoreCase(estoque[i].getNome())) {
                     controle=false;
-                    System.out.println(estoque[i].toString());
+                    System.out.println("PRODUTO ENCONTRADO\n");
+                    System.out.println("Produto: "
+                                        + estoque[i].getNome()
+                                        + "\nPreço: "
+                                        + estoque[i].getPreco()
+                                        + "\nUnidade de medida: "
+                                        + estoque[i].getUnidade()
+                                        + "\nQuantidade em estoque: "
+                                        + estoque[i].getQuant());
                     System.out.println("CONFIRMA EXCLUSÃO ( S/N ) ?");
                     escolha = scanner.next();
                     if (escolha.equalsIgnoreCase("S")) {
@@ -262,14 +278,14 @@ public class Controle {
     //movimentação e demais funcoes referentes
 
     private void movimentacao() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("MOVIMENTAÇÃO");
         System.out.println("1 - ENTRADA\n" 
                             + "2 - SAÍDA\n"
                             + "0 - RETORNAR\n"
                             + "OPÇÃO  : \n");
 
-        int opMovimentacao = scanner.nextInt();
+        int opMovimentacao = getEscolhaMenu();
         switch (opMovimentacao) {
             case 1:
                 movEnt();
@@ -364,12 +380,13 @@ public class Controle {
                                 + "POSIÇÃO NO ESTOQUE: "
                                 + i+1
                                 + "\n"
+                                + "\nProduto: "
                                 + estoque[i].getNome()
-                                + "Preço: "
+                                + "\nPreço: "
                                 + estoque[i].getPreco()
-                                + "Unidade de medida: "
+                                + "\nUnidade de medida: "
                                 + estoque[i].getUnidade()
-                                + "Quantidade em estoque: "
+                                + "\nQuantidade em estoque: "
                                 + estoque[i].getQuant());
 
         }

@@ -1,6 +1,4 @@
-import java.util.Scanner;
 import Controle.Controle;
-import Produto.Produto;
 
 
 public class App {

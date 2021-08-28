@@ -7,7 +7,7 @@ import Produto.Produto;
 public class Controle {
     public Controle(){}
 
-    private Produto estoque[] = new Produto[1];
+    private Produto[] estoque = new Produto[50];
     private int posicaoAtual = 0;
 
     //tela principal
@@ -113,27 +113,36 @@ public class Controle {
     }
 
     private Produto novoProduto() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Informe o nome do produto a ser cadastrado:");
-        String nome = sc.nextLine();
-        System.out.println("Informe o preço:");
-        double preco = sc.nextDouble();
-        System.out.println("Informe a unidade de medida");
-        sc.nextLine();
-        String unidade = sc.nextLine();
-        System.out.println("Informe a quantidade");
-        int quantidade = sc.nextInt();
+        String nome = null, unidade = null;
+        double preco =0;
+        int quantidade = 0;
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Informe o nome do produto a ser cadastrado:");
+            nome = sc.nextLine();
+            System.out.println("Informe o preço:");
+            preco = sc.nextDouble();
+            System.out.println("Informe a unidade de medida");
+            sc.nextLine();
+            unidade = sc.nextLine();
+            System.out.println("Informe a quantidade");
+            quantidade = sc.nextInt();
 
+
+        } catch (Exception e) {
+            System.out.println("Erro! Você digitou um alfanumérico no lugar de um número.");
+        }
         Produto produto = new Produto(nome, preco, unidade, quantidade);
         System.out.println("Os dados do produto são:"
-                            + "\nNome: " 
-                            + nome
-                            + "\nPreço: "
-                            + preco
-                            + "\nUnidade de medida: "
-                            + unidade
-                            + "\nQuantidade no estoque: "
-                            + quantidade);
+                + "\nNome: "
+                + nome
+                + "\nPreço: "
+                + preco
+                + "\nUnidade de medida: "
+                + unidade
+                + "\nQuantidade no estoque: "
+                + quantidade);
+
 
         return produto;
     }
